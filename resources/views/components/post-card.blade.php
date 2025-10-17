@@ -2,6 +2,16 @@
 
 <div class="card bg-green-50">
         
+
+      @if($post->image_url !=NULL)
+ <div>
+            <img src="{{asset("storage/".$post->image_url)}}">
+      </div>
+      @else
+       <div>
+            <img src="{{asset("storage/posts_images/default_image.png")}}">
+      </div>
+      @endif
          <h2 class="font-bold text-xl">{{$post->title}}</h2>
          <div class="text-xs font-light mb-4">
             <span>posted {{$post->created_at->diffForHumans()}} by <a href="{{route('posts.user',$post->user_id)}}">{{$post->user->username}}</a></span>

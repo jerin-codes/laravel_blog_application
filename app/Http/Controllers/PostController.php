@@ -7,19 +7,20 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\StorePostRequest;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Requests\UpdatePostRequest;
 use Illuminate\Routing\Controllers\HasMiddleware;
 
-class PostController extends Controller implements HasMiddleware
+class PostController extends Controller 
 {
     /**
      * Display a listing of the resource.
      */
-     public static function middleware(){
-        return [
-            newMiddleware("auth",except:["index","show"]),
-        ];
-     }
+    //  public static function middleware(){
+    //     return [
+    //         newMiddleware("auth",except:["index","show"]),
+    //     ];
+    //  }
     public function index()
     {
 
@@ -43,11 +44,23 @@ class PostController extends Controller implements HasMiddleware
      */
     public function store(Request $request)
     {
+
+        
        $fields=$request->validate([
         "title"=>["required"],
-        "description"=>["required"]
+        "description"=>["required"],
+        "image"=>["nullable","file","max:1024","mimes:jpg,png,web"]
+    
        ]);
-     
+
+       if($request->image){
+
+           $imageUrl=Storage::disk("public")->put("posts_images",$request->image); 
+        $fields["image_url"]=$imageUrl;
+        }
+       
+       
+
        
        Auth::user()->posts()->create($fields);
         return back()->with(
