@@ -3,7 +3,7 @@
 <div class="card bg-green-50">
         
 
-      @if($post->image_url !=NULL)
+      @if($post->image_url)
  <div>
             <img src="{{asset("storage/".$post->image_url)}}">
       </div>
